@@ -1,8 +1,10 @@
-# Memex Skill — Agent 记忆系统
+# Memex Skill — 通用 Agent 记忆系统
 
 ## 简介
 
 Memex 是 Agent 的长期记忆系统，让 Agent 能在跨会话中积累知识和偏好。
+
+**通用设计**：任何 Agent 框架都可以接入（OpenClaw、Claude Code、Cursor、Codex 等）。
 
 **核心理念**：
 - Verbatim 存储 — 原文保留，不依赖 LLM 提取
@@ -153,6 +155,17 @@ memex init
 
 # 验证
 memex stats
+```
+
+### OpenClaw Agent 接入
+
+将 skill 复制到 `~/.openclaw/skills/memex/`，Agent 在合适的时机调用 `memex search` / `memex save`。
+
+### 其他 Agent 框架
+
+直接调用 CLI 命令即可：
+```bash
+memex search "用户偏好" --repo user --limit 5
 ```
 
 ---
