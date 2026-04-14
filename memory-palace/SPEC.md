@@ -59,13 +59,14 @@ Verbatim 原文存储（SQLite）─ 文本 + 时间戳 + 元数据
 
 ### Phase 0：奠基 ✅
 - [x] 创建项目结构
-- [ ] 基础存储层（SQLite + LanceDB）
-- [ ] Git 初始化
+- [x] 基础存储层（SQLite）
+- [x] Git 初始化
 
-### Phase 1：核心存储
-- [ ] Verbatim 存储 API
-- [ ] 向量索引集成
-- [ ] 基础搜索接口
+### Phase 1：向量搜索 ✅
+- [x] Verbatim 存储 API
+- [x] 向量索引集成（LanceDB IVF-PQ）
+- [x] 基础搜索接口（SQL + 向量混合）
+- [x] 测试通过（5/5）
 
 ### Phase 2：宫殿结构
 - [ ] Wing/Room/Closet/Drawer CRUD
@@ -159,3 +160,4 @@ def search(query: str, wing: str = None, room: str = None,
 | 日期 | 阶段 | 进展 | 备注 |
 |------|------|------|------|
 | 2026-04-14 | Phase 0 | 开始奠基 | 项目创建，SPEC.md 完成 |
+| 2026-04-14 | Phase 1 | 向量搜索 | LanceDB 集成，混合搜索，5 测试通过 |

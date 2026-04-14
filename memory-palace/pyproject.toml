@@ -2,7 +2,7 @@
 name = "memory-palace"
 version = "0.1.0"
 description = "AI 自我记忆系统 — Verbatim 存储 + 结构化召回"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "sqlite-utils",
     "lancedb",
