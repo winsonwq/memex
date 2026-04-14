@@ -3,3 +3,6 @@ __pycache__/
 *.log
 /tmp/
 .env
+dist/
+memex.egg-info/
+build/
