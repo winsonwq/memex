@@ -28,6 +28,25 @@ def init():
     storage_path = get_storage_path()
     
     click.echo(f"✅ 初始化完成")
+
+
+@cli.command()
+def install_skill():
+    """安装 Skill 到 ~/.agents/skills/memex/（供 Agent 系统使用）"""
+    import os
+    import shutil
+    
+    skill_src = os.path.join(os.path.dirname(__file__), "SKILL.md")
+    skill_dest_dir = os.path.expanduser("~/.agents/skills/memex")
+    skill_dest = os.path.join(skill_dest_dir, "SKILL.md")
+    
+    if not os.path.exists(skill_src):
+        click.echo(f"❌ SKILL.md 未找到: {skill_src}")
+        return
+    
+    os.makedirs(skill_dest_dir, exist_ok=True)
+    shutil.copy2(skill_src, skill_dest)
+    click.echo(f"✅ Skill 已安装到: {skill_dest}")
     click.echo(f"   存储路径: {storage_path}")
     click.echo(f"   向量数据库: {config.vector_store.provider}")
     click.echo(f"   Embedding 模型: {config.embedding.model}")
