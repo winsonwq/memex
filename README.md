@@ -19,6 +19,19 @@
 
 ---
 
+## Summary
+
+Memex 定位与 MemPalace 不同：
+
+- **MemPalace** → maximize **recall**（找回正确答案），适合 benchmark
+- **Memex Phase 2** → maximize **utility**（找回最有用的答案），适合真实场景
+
+Phase 2 独有的高级机制：语义蒸馏、混合检索、记忆修订、衰减遗忘、矛盾检测、记忆合并。这些机制没有公开 benchmark，需要在真实使用中验证价值。
+
+📄 详见：[docs/comparison.md](docs/comparison.md)
+
+---
+
 ## 快速开始
 
 ### 安装
