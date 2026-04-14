@@ -16,6 +16,15 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Get version from tag
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Update version in pyproject.toml
+        run: sed -i "s/version = \".*\"/version = \"$VERSION\"/" pyproject.toml
+
+      - name: Verify version
+        run: grep "^version" pyproject.toml
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
