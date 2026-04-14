@@ -117,7 +117,7 @@ memex/
 │   └── cli.py           # CLI 命令
 ├── skills/
 │   └── memory-skill/
-│       └── SKILL.md     # OpenClaw Skill
+│       └── SKILL.md     # 通用 Agent Skill
 └── tests/
 ```
 
@@ -145,7 +145,7 @@ min_similarity = 0.4
 
 ---
 
-## OpenClaw Skill
+## 通用 Agent Skill
 
 将 Memex 接入 Agent：
 
