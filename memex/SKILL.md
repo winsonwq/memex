@@ -1,3 +1,16 @@
+---
+name: memex
+description: Agent 长期记忆系统。用于跨会话积累知识和偏好。支持自然语言搜索、六种记忆类型分类、隐私控制。当需要记住关键信息、查询用户偏好、检索决策依据时使用。
+metadata:
+  {
+    "openclaw":
+      {
+        "requires": { "commands": ["memex"] },
+        "install": ["pip install memex-agent-memory"],
+      },
+  }
+---
+
 # Memex Skill — 通用 Agent 记忆系统
 
 ## 简介
