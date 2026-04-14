@@ -1,0 +1,2 @@
+[console_scripts]
+memex = memex.cli:cli

@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "memex"
+name = "memex-agent-memory"
 version = "0.1.0"
 description = "Agent 记忆系统 — 轻量级本地向量数据库 + CLI + Agent Skill"
 readme = "README.md"
