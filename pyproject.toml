@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "memex-agent-memory"
-version = "0.1.1"
+version = "0.1.2"
 description = "Agent 记忆系统 — 轻量级本地向量数据库 + CLI + Agent Skill"
 readme = "README.md"
 license = {text = "MIT"}
@@ -26,6 +26,7 @@ dependencies = [
     "sentence-transformers>=2.7.0",
     "click>=8.0.0",
     "pyyaml>=6.0.0",
+    "numpy<2",
 ]
 
 [project.optional-dependencies]
