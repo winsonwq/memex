@@ -21,11 +21,19 @@ def cli():
 
 @cli.command()
 def init():
-    """初始化 Memex（使用默认配置）"""
+    """初始化 Memex（使用默认配置配置）"""
     config = load_config()
     
     # 确保存储目录存在
     storage_path = get_storage_path()
+    
+    click.echo(f"   存储路径: {storage_path}")
+    click.echo(f"   向量数据库: {config.vector_store.provider}")
+    click.echo(f"   Embedding 模型: {config.embedding.model}")
+    click.echo(f"下载Embedding模型...")
+    
+    # 预热 embedding 模型（下载 + 验证）
+    embed_module.get_model()
     
     click.echo(f"✅ 初始化完成")
 
