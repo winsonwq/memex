@@ -1,10 +1,12 @@
 """
 LanceDB 实现
 """
+from datetime import datetime
 from pathlib import Path
 from typing import Optional, List
 
 import lancedb
+import pyarrow as pa
 
 from .._types import MemoryRecord
 from .._config import load_config, get_storage_path
@@ -24,21 +26,37 @@ class LanceDBStore(VectorStore):
         
         self.db = lancedb.connect(str(db_path))
         self.table_name = "memories"
+        self._dimension = config.embedding.dimension
         self._ensure_table()
     
     def _ensure_table(self):
         """确保表存在"""
         if self.table_name not in self.db.table_names():
-            # 创建表
-            self.db.create_table(self.table_name, data=[
-                {
-                    "id": "placeholder",
-                    "vector": [0.0] * 768,
-                }
+            # 使用正确的 schema 创建表
+            schema = pa.schema([
+                pa.field("id", pa.string()),
+                pa.field("type", pa.string()),
+                pa.field("content", pa.string()),
+                pa.field("raw_text", pa.string()),
+                pa.field("importance", pa.float64()),
+                pa.field("confidence", pa.float64()),
+                pa.field("stability", pa.string()),
+                pa.field("revision_count", pa.int64()),
+                pa.field("contradicts", pa.list_(pa.string())),
+                pa.field("supports", pa.list_(pa.string())),
+                pa.field("derived_from", pa.string()),
+                pa.field("created_at", pa.int64()),
+                pa.field("last_updated", pa.int64()),
+                pa.field("last_accessed", pa.int64()),
+                pa.field("expires_at", pa.int64()),
+                pa.field("repo", pa.string()),
+                pa.field("title", pa.string()),
+                pa.field("metadata", pa.string()),  # JSON 字符串
+                pa.field("trust", pa.float64()),
+                pa.field("vector", pa.list_(pa.float64(), self._dimension)),
             ])
-            # 删除 placeholder
-            tbl = self.db.open_table(self.table_name)
-            tbl.delete("id = 'placeholder'")
+            
+            self.db.create_table(self.table_name, schema=schema)
     
     def _get_table(self):
         return self.db.open_table(self.table_name)
@@ -49,6 +67,7 @@ class LanceDBStore(VectorStore):
         
         data = record.to_dict()
         data["vector"] = vector
+        data["metadata"] = str(data["metadata"])  # JSON 字符串
         
         table.add([data])
     
@@ -64,18 +83,25 @@ class LanceDBStore(VectorStore):
         # 构建过滤
         where = f"repo = '{repo}'" if repo else None
         
-        results = table.vector_search(
+        query = table.search(
             query_vector,
             vector_column_name="vector",
-            where=where,
-            limit=limit,
         )
         
+        if where:
+            query = query.where(where)
+        
+        results = query.limit(limit).to_list()
+        
         records = []
-        for r in results.to_list():
+        for i, r in enumerate(results):
+            r.pop("vector", None)  # 移除 vector 字段
+            r.pop("_distance", None)  # 移除 LanceDB 返回的距离字段
+            r["metadata"] = {}
             record = MemoryRecord.from_dict(r)
-            # LanceDB 不直接返回分数，用相似度排名作为近似
-            records.append((record, 1.0 - (len(records) / (limit * 2))))
+            # 用排名作为近似分数
+            score = 1.0 - (i / (limit * 2))
+            records.append((record, score))
         
         return records
     
@@ -85,11 +111,7 @@ class LanceDBStore(VectorStore):
         repo: Optional[str] = None,
         limit: int = 10,
     ) -> list[tuple[MemoryRecord, float]]:
-        """
-        文本搜索（使用 LanceDB 的 full-text search）
-        """
-        # TODO: Phase 2 实现 FTS
-        # 目前返回空列表，需要 embedding 支持
+        """文本搜索（TODO: Phase 2 实现 FTS）"""
         return []
     
     def get(self, record_id: str) -> Optional[MemoryRecord]:
@@ -101,7 +123,10 @@ class LanceDBStore(VectorStore):
         if not results:
             return None
         
-        return MemoryRecord.from_dict(results[0])
+        r = results[0]
+        r.pop("vector", None)
+        r["metadata"] = {}
+        return MemoryRecord.from_dict(r)
     
     def list(
         self,
@@ -126,7 +151,13 @@ class LanceDBStore(VectorStore):
         
         results = query.limit(limit).to_list()
         
-        return [MemoryRecord.from_dict(r) for r in results]
+        records = []
+        for r in results:
+            r.pop("vector", None)
+            r["metadata"] = {}
+            records.append(MemoryRecord.from_dict(r))
+        
+        return records
     
     def update(self, record: MemoryRecord) -> None:
         """更新记忆"""
@@ -134,12 +165,16 @@ class LanceDBStore(VectorStore):
         
         record.last_updated = int(datetime.now().timestamp() * 1000)
         
-        # LanceDB 没有原生 update，用 delete + add 模拟
+        # 删除旧记录
         table.delete(f"id = '{record.id}'")
         
-        # 注意：update 需要同时更新 vector，这里简化处理
-        # 完整实现需要在调用 update 时传入新 vector
-        table.add([record.to_dict()])
+        # 添加新记录（需要重新获取 vector，这里简化处理）
+        # 完整实现需要调用者传入新 vector
+        data = record.to_dict()
+        data.pop("vector", None)
+        data["metadata"] = str(data["metadata"])
+        # 注意：update 需要同时更新 vector，这里会丢失
+        table.add([data])
     
     def delete(self, record_id: str) -> None:
         """删除记忆"""
@@ -148,20 +183,8 @@ class LanceDBStore(VectorStore):
     
     def count(self, repo: Optional[str] = None) -> int:
         """统计数量"""
-        table = self._get_table()
-        
-        if repo:
-            results = table.search().where(f"repo = '{repo}'").limit(1000).to_list()
-        else:
-            results = table.search().limit(1000).to_list()
-        
-        return len(results)
+        return len(self.list(repo=repo, limit=10000))
     
     def close(self) -> None:
         """关闭连接"""
-        # LanceDB 是嵌入式，不需要显式关闭
         pass
-
-
-# 需要 datetime
-from datetime import datetime
