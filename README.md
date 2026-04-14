@@ -185,7 +185,7 @@ LongMemEval 支持两种评估粒度：
 
 MemPalace 的 96.6% 是 turn-level 的结果。Turn-level 更接近真实场景——你的每一次对话、每一条消息，都可能藏着答案。
 
-Memex 在 turn-level 达到 91.8%，和 MemPalace 差距约 5 个百分点，且完全本地化、开源。
+Memex 在 turn-level 达到 91.8%（vs MemPalace 96.6%），差距约 5 个百分点。优势在于完全开源、本地化、中文优化（基于 BGE-base-zh-v1.5）。
 
 ### 核心发现
 
