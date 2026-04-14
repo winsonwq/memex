@@ -10,7 +10,7 @@
 
 ## 特性
 
-- **Verbatim 存储** — 原文保留，不依赖 LLM 提取摘要
+- **原文存储** — 原文保留，不依赖 LLM 提取摘要
 - **向量语义搜索** — 支持自然语言查询记忆
 - **六种记忆类型** — constraint / user_model / strategy / system_pattern / belief / journal
 - **隐私可控** — recall / purge 用户自主控制
@@ -189,7 +189,7 @@ Memex 在 turn-level 达到 91.8%，和 MemPalace 差距约 5 个百分点，且
 
 ### 核心发现
 
-1. **原文存储有效**：不经过 LLM 提取的 Verbatim 方案，在记忆召回任务上表现优异
+1. **原文存储有效**：不经过 LLM 提取的 原文方案，在记忆召回任务上表现优异
 2. **Turn-level 优于 Session-level**：粒度越细，能找回的细节越多
 3. **本地化可行**：用开源工具 + 本地存储，可以达到甚至超越商业服务
 

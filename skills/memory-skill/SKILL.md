@@ -7,7 +7,7 @@ Memex 是 Agent 的长期记忆系统，让 Agent 能在跨会话中积累知识
 **通用设计**：任何 Agent 框架都可以接入（OpenClaw、Claude Code、Cursor、Codex 等）。
 
 **核心理念**：
-- Verbatim 存储 — 原文保留，不依赖 LLM 提取
+- 原文存储 — 原文保留，不依赖 LLM 提取
 - 向量语义搜索 — 支持自然语言查询
 - 隐私可控 — 用户可随时查看、删除记忆
 

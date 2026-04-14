@@ -81,12 +81,12 @@ AI 回答："抱歉，我不知道你之前用的是什么数据库。"
 
 | 系统 | R@5 | 方式 | 成本 | 本地化 |
 |------|------|------|------|------|
-| **MemPalace (raw)** | 96.6% | Verbatim + ChromaDB | 免费 | ✅ |
+| **MemPalace (raw)** | 96.6% | ChromaDB 向量检索 | 免费 | ✅ |
 | **MemPalace (hybrid)** | 100% | + LLM reranking | ~$0.001/次 | ✅ |
 | **Supermemory** | ~99% | - | 付费 | ❌ |
 | **Mem0** | ~85% | LLM 提取事实 | $19-249/月 | ❌ |
 | **Zep** | ~85% | LLM 提取事实 | $25/月+ | ❌ |
-| **Memex (我们的实现)** | 待测 | Verbatim + 向量搜索 | 免费 | ✅ |
+| **Memex (我们的实现)** | 待测 | 向量检索 | 免费 | ✅ |
 
 > 注：LongMemEval 原生使用 turn-level 粒度（每条记录 = 一个对话回合），Memex 目前使用 session-level 粒度（每条记录 = 一个会话），两种粒度的分数不可直接对比。Turn-level 结果更具挑战性，Session-level 结果更实用。
 
