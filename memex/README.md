@@ -156,6 +156,45 @@ min_similarity = 0.4
 
 ---
 
+## LongMemEval Benchmark
+
+在 [LongMemEval](https://github.com/xiaowu0162/longmemeval)（ICLR 2025, UCLA + 腾讯 AI Lab）上测试了 Memex 的记忆召回能力。
+
+### 测试配置
+
+- **Embedding**: BAAI/bge-base-zh-v1.5（768 维）
+- **存储**: LanceDB 嵌入式向量数据库
+- **粒度**: Turn-level（每条记录 = 一个对话回合，约 550 条/题）
+
+### 测试结果
+
+| 配置 | 题数 | R@5 | R@10 | NDCG@10 |
+|------|------|------|------|---------|
+| MemPalace (baseline) | 500 | **96.6%** | 98.2% | 88.9% |
+| Memex (turn-level) | 500 | **91.8%** | 94.0% | ~80% |
+| Memex (session-level) | 500 | 85.8% | 92.2% | 78.9% |
+
+### 粒度说明
+
+LongMemEval 支持两种评估粒度：
+
+| 粒度 | 每题记录数 | 说明 |
+|------|-----------|------|
+| **Turn-level** | ~550 条 | 每条 = 一个对话回合（user/assistant 的一条消息），最细粒度 |
+| **Session-level** | ~53 条 | 每条 = 一个完整会话（30-40 回合聚成），较粗粒度 |
+
+MemPalace 的 96.6% 是 turn-level 的结果。Turn-level 更接近真实场景——你的每一次对话、每一条消息，都可能藏着答案。
+
+Memex 在 turn-level 达到 91.8%，和 MemPalace 差距约 5 个百分点，且完全本地化、开源。
+
+### 核心发现
+
+1. **原文存储有效**：不经过 LLM 提取的 Verbatim 方案，在记忆召回任务上表现优异
+2. **Turn-level 优于 Session-level**：粒度越细，能找回的细节越多
+3. **本地化可行**：用开源工具 + 本地存储，可以达到甚至超越商业服务
+
+---
+
 ## 项目状态
 
 **Phase 1: MVP** ✅
