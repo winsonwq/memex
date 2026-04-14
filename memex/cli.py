@@ -47,9 +47,6 @@ def install_skill():
     os.makedirs(skill_dest_dir, exist_ok=True)
     shutil.copy2(skill_src, skill_dest)
     click.echo(f"✅ Skill 已安装到: {skill_dest}")
-    click.echo(f"   存储路径: {storage_path}")
-    click.echo(f"   向量数据库: {config.vector_store.provider}")
-    click.echo(f"   Embedding 模型: {config.embedding.model}")
 
 
 @cli.command()
