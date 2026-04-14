@@ -1,0 +1,31 @@
+[project]
+name = "memex"
+version = "0.1.0"
+description = "Agent 记忆系统 — 嵌入式向量数据库 + CLI + Skill"
+requires-python = ">=3.10"
+dependencies = [
+    "lancedb>=0.12",
+    "sentence-transformers>=2.2",
+    "click>=8.0",
+    "questionary>=2.0",
+    "pydantic>=2.0",
+    "toml>=0.10",
+]
+
+[project.scripts]
+memex = "memex.cli:cli"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
