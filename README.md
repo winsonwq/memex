@@ -40,6 +40,7 @@ Phase 2 独有的高级机制：语义蒸馏、混合检索、记忆修订、衰
 
 ```bash
 pip install memex-agent-memory
+memex install-skill   # 安装 Skill 到 ~/.agents/skills/memex/
 ```
 
 ### 初始化
