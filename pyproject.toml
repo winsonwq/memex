@@ -1,31 +1,61 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "memex"
 version = "0.1.0"
-description = "Agent 记忆系统 — 嵌入式向量数据库 + CLI + Skill"
-requires-python = ">=3.10"
+description = "Agent 记忆系统 — 轻量级本地向量数据库 + CLI + Agent Skill"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Wang Qiu", email = "wangqiu777@gmail.com"}
+]
+keywords = ["ai", "agent", "memory", "vector-search", "lancedb"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
 dependencies = [
-    "lancedb>=0.12",
-    "sentence-transformers>=2.2",
-    "click>=8.0",
-    "questionary>=2.0",
-    "pydantic>=2.0",
-    "toml>=0.10",
+    "lancedb>=0.11.0",
+    "InstructorEmbedding>=1.0.1",
+    "sentence-transformers>=2.7.0",
+    "click>=8.0.0",
+    "pyyaml>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
 ]
 
 [project.scripts]
 memex = "memex.cli:cli"
 
-[project.optional-dependencies]
-dev = [
-    "pytest",
-    "pytest-asyncio",
-    "ruff",
-]
+[project.urls]
+Homepage = "https://github.com/winsonwq/memex"
+Repository = "https://github.com/winsonwq/memex"
+Documentation = "https://github.com/winsonwq/memex#readme"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[tool.setuptools]
+packages = ["memex", "memex.store"]
+package-data = {memex = ["py.typed", "SKILL.md"]}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
 
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
