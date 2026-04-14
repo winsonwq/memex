@@ -6,3 +6,4 @@ __pycache__/
 dist/
 memex.egg-info/
 build/
+*.egg-info/
