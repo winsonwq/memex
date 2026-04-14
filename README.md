@@ -185,13 +185,25 @@ LongMemEval 支持两种评估粒度：
 
 MemPalace 的 96.6% 是 turn-level 的结果。Turn-level 更接近真实场景——你的每一次对话、每一条消息，都可能藏着答案。
 
-Memex 在 turn-level 达到 91.8%（vs MemPalace 96.6%），差距约 5 个百分点。优势在于完全开源、本地化、中文优化（基于 BGE-base-zh-v1.5）。
+Memex 在 turn-level 达到 91.8%（vs MemPalace 96.6%），差距约 5 个百分点。
+
+### 和 MemPalace 的差异
+
+| 维度 | Memex | MemPalace |
+|------|-------|----------|
+| 向量数据库 | **LanceDB**（列式存储，更高性能） | ChromaDB |
+| Embedding | **BGE-base-zh-v1.5**（中文优化） | 英文模型 |
+| 存储抽象 | **VectorStore 接口**，可切换后端 | 固定 ChromaDB |
+| 记忆类型 | **六种分类**（constraint/user_model/...） | 纯 chunks |
+| 接口 | **CLI + Agent Skill** 双接口 | API |
+
+LanceDB 基于 Apache Arrow 列式存储，查询性能更强，存储更紧凑；BGE 中文 embedding 对中文对话的记忆召回更有优势。
 
 ### 核心发现
 
-1. **原文存储有效**：不经过 LLM 提取的 原文方案，在记忆召回任务上表现优异
+1. **原文存储有效**：不经过 LLM 提取的原文方案，在记忆召回任务上表现优异
 2. **Turn-level 优于 Session-level**：粒度越细，能找回的细节越多
-3. **本地化可行**：用开源工具 + 本地存储，可以达到甚至超越商业服务
+3. **中文 embedding 很重要**：中文场景下，BGE-base-zh-v1.5 比英文模型效果更好
 
 ---
 
