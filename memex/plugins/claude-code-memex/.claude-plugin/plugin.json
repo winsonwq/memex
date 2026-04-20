@@ -1,0 +1,9 @@
+{
+  "name": "memex-plugin",
+  "version": "0.1.0",
+  "description": "Memex memory integration for Claude Code — auto-save observations and inject relevant memory at session start",
+  "author": {
+    "name": "memex"
+  },
+  "license": "MIT"
+}

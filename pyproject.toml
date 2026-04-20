@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "memex-agent-memory"
-version = "0.1.8"
+version = "0.1.9"
 description = "Agent 记忆系统 — 轻量级本地向量数据库 + CLI + Agent Skill"
 readme = "README.md"
 license = {text = "MIT"}
@@ -46,7 +46,7 @@ Documentation = "https://github.com/winsonwq/memex#readme"
 
 [tool.setuptools]
 packages = ["memex", "memex.store"]
-package-data = {memex = ["py.typed", "SKILL.md"]}
+package-data = {memex = ["py.typed", "SKILL.md", "plugins/**"]}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

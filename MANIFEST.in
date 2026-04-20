@@ -1,6 +1,6 @@
 include README.md
 include LICENSE
-recursive-include memex *.py *.md py.typed
+recursive-include memex *.py *.md py.typed plugins/**
 recursive-exclude tests *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]

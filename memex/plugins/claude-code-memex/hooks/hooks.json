@@ -1,0 +1,42 @@
+{
+  "description": "Memex memory integration for Claude Code",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun \"$CLAUDE_PLUGIN_ROOT/scripts/memex-inject.js\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Edit|Write|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun \"$CLAUDE_PLUGIN_ROOT/scripts/memex-save.js\"",
+            "async": true,
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun \"$CLAUDE_PLUGIN_ROOT/scripts/memex-save.js\" --session-end",
+            "async": true,
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

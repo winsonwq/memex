@@ -58,6 +58,50 @@ def install_skill():
 
 
 @cli.command()
+@click.argument("platform", required=False, default="claude-code")
+def install_plugin(platform):
+    """安装 Agent 平台的 memex 插件"""
+    import os
+    import shutil
+    
+    plugin_map = {
+        "claude-code": {
+            "src": os.path.join(os.path.dirname(__file__), "plugins", "claude-code-memex"),
+            "dest": os.path.expanduser("~/.claude/plugins/memex"),
+        }
+    }
+    
+    if platform not in plugin_map:
+        supported = ", ".join(plugin_map.keys())
+        click.echo(f"❌ 不支持的平台: {platform}")
+        click.echo(f"   支持的平台: {supported}")
+        return
+    
+    cfg = plugin_map[platform]
+    src = os.path.normpath(cfg["src"])
+    dest = os.path.normpath(cfg["dest"])
+    
+    if not os.path.exists(src):
+        click.echo(f"❌ 插件未找到: {src}")
+        click.echo(f"   可能是从 pip 安装的？插件源码在 GitHub 仓库中。")
+        return
+    
+    # 创建目标目录
+    os.makedirs(os.path.dirname(dest), exist_ok=True)
+    
+    # 移除旧的
+    if os.path.islink(dest):
+        os.unlink(dest)
+    elif os.path.exists(dest):
+        shutil.rmtree(dest)
+    
+    # 链接
+    os.symlink(src, dest)
+    click.echo(f"✅ Claude Code 插件已安装: {dest}")
+    click.echo(f"   重启 Claude Code 后生效")
+
+
+@cli.command()
 @click.option("--type", "-t", "memory_type", required=True, 
               type=click.Choice([t.value for t in MemoryType]))
 @click.option("--content", "-c", required=True, help="记忆内容")
